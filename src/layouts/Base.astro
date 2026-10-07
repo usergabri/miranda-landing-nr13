@@ -1,0 +1,121 @@
+---
+import '../styles/global.css';
+import montserrat800 from '@fontsource/montserrat/files/montserrat-latin-800-normal.woff2?url';
+import inter400 from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
+import CookieBanner from '../components/CookieBanner.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Objetos JSON-LD adicionais desta página */
+  jsonLd?: Record<string, unknown>[];
+  noindex?: boolean;
+}
+
+const { title, description, jsonLd = [], noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('/og-image.png', Astro.site).href;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta name="theme-color" content="#0B1620" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <link rel="preload" href={montserrat800} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={inter400} as="font" type="font/woff2" crossorigin />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content={site.nome} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Miranda Engenharia — Inspeção NR-13 de caldeiras, vasos de pressão e tubulações em todo o Brasil" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    {jsonLd.map((obj) => <script type="application/ld+json" set:html={JSON.stringify(obj)} />)}
+
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      window.dataLayer = window.dataLayer || [];
+    </script>
+
+    <!--
+      Google Ads e Meta Pixel (desativados). Quando houver IDs, devem ser carregados
+      no mesmo ponto em que o GTM é carregado (CookieBanner.astro, função carregarGTM),
+      somente após o aceite dos cookies — de preferência configurados dentro do próprio GTM.
+      Exemplo Google Ads:  gtag('config', 'AW-XXXXXXXXX');
+      Exemplo Meta Pixel:  fbq('init', 'XXXXXXXXXXXXXXX'); fbq('track', 'PageView');
+    -->
+  </head>
+  <body>
+    <a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+    <slot />
+    <CookieBanner gtmId={site.gtmId} />
+
+    <script>
+      // Rastreamento: todo clique em link de WhatsApp vai para o dataLayer
+      document.addEventListener('click', (e) => {
+        const alvo = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[data-servico]');
+        if (!alvo) return;
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: 'whatsapp_click',
+          servico: alvo.dataset.servico,
+          secao: alvo.dataset.secao,
+        });
+      });
+
+      // Acordeões acessíveis: botão com aria-expanded controlando o painel (aria-controls)
+      document.querySelectorAll<HTMLButtonElement>('button[data-acordeao]').forEach((botao) => {
+        const painel = document.getElementById(botao.getAttribute('aria-controls')!);
+        const rotulo = botao.querySelector<HTMLElement>('[data-rotulo]');
+        botao.addEventListener('click', () => {
+          const aberto = botao.getAttribute('aria-expanded') === 'true';
+          botao.setAttribute('aria-expanded', String(!aberto));
+          if (painel) painel.hidden = aberto;
+          if (rotulo) rotulo.textContent = (aberto ? botao.dataset.rotuloFechado : botao.dataset.rotuloAberto) ?? rotulo.textContent;
+        });
+      });
+
+      // Revelação discreta ao entrar na tela
+      const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const itens = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if (reduzir || !('IntersectionObserver' in window)) {
+        itens.forEach((el) => el.classList.add('is-visible'));
+      } else {
+        const obs = new IntersectionObserver(
+          (entradas) => {
+            for (const ent of entradas) {
+              if (ent.isIntersecting) {
+                ent.target.classList.add('is-visible');
+                obs.unobserve(ent.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.1 },
+        );
+        itens.forEach((el) => obs.observe(el));
+      }
+    </script>
+  </body>
+</html>

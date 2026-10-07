@@ -1,0 +1,55 @@
+---
+// Única seção da página que usa o âmbar (alert).
+import Icon from './Icon.astro';
+import WhatsAppButton from './WhatsAppButton.astro';
+
+const riscos = [
+  {
+    icone: 'ban',
+    titulo: 'Interdição',
+    texto: 'O fiscal pode interditar caldeiras e vasos irregulares na hora. Equipamento parado é produção parada.',
+  },
+  {
+    icone: 'file-warning',
+    titulo: 'Autuação',
+    texto: 'Documentação ausente ou vencida gera multa na fiscalização do trabalho.',
+  },
+  {
+    icone: 'scale',
+    titulo: 'Responsabilidade',
+    texto: 'Em caso de acidente, o gestor responde civil e criminalmente se a inspeção não estava em dia.',
+  },
+  {
+    icone: 'clipboard-check',
+    titulo: 'Auditorias e seguros',
+    texto: 'Clientes, certificações e seguradoras exigem prontuário e laudos válidos.',
+  },
+] as const;
+---
+
+<section aria-labelledby="riscos-titulo" class="bg-steel-950 py-16 md:py-24">
+  <div class="container-site">
+    <h2 id="riscos-titulo" class="h2 max-w-[22ch]" data-reveal>
+      <span class="whitespace-nowrap">NR-13</span> vencida não é só papelada. É risco para a sua operação.
+    </h2>
+
+    <ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+      {
+        riscos.map((r, i) => (
+          <li class="card border-t-2 border-t-alert p-6" data-reveal style={`--reveal-delay:${i * 80}ms`}>
+            <Icon name={r.icone} size={28} strokeWidth={1.5} class="text-alert" />
+            <h3 class="mt-4 text-xl">{r.titulo}</h3>
+            <p class="mt-2 text-muted">{r.texto}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="mt-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between" data-reveal>
+      <p class="max-w-[52ch] text-lg">
+        Regularizar é mais simples do que parece quando um especialista cuida de tudo, do levantamento à ART.
+      </p>
+      <WhatsAppButton chave="riscos" secao="riscos" class="shrink-0">Verificar a situação dos meus equipamentos</WhatsAppButton>
+    </div>
+  </div>
+</section>

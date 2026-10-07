@@ -1,0 +1,110 @@
+---
+import { Image } from 'astro:assets';
+import heroFoto from '../assets/fotos/hero-engenheiro.png';
+import Icon from './Icon.astro';
+import WhatsAppButton from './WhatsAppButton.astro';
+import { site } from '../data/site';
+
+const confianca = [
+  { icone: 'shield-check', texto: 'Orçamento sem compromisso' },
+  { icone: 'badge-check', texto: `CREA ${site.creaResponsavel}` },
+  { icone: 'map-pin', texto: 'Atendimento em todo o Brasil' },
+] as const;
+---
+
+<section id="topo" class="hero relative z-10 bg-steel-950 pt-[88px] pb-[calc(var(--degrau)+2.5rem)] lg:pt-32 lg:pb-[calc(var(--degrau)+3rem)]">
+  <div class="container-site grid items-center gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:gap-14">
+    <div>
+      <h1 class="text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.08]">
+        Inspeção <span class="whitespace-nowrap">NR-13</span> de caldeiras, vasos de pressão e tubulações em todo o Brasil
+      </h1>
+      <p class="mt-5 max-w-[56ch] text-[1.0625rem] text-muted md:text-lg">
+        Laudo, ART e documentação completa, assinados por um engenheiro mecânico que começou no chão de fábrica. Seus
+        equipamentos em conformidade e sua produção sem risco de interdição.
+      </p>
+      <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+        <WhatsAppButton chave="geral" secao="hero" size="lg">Falar com o engenheiro no WhatsApp</WhatsAppButton>
+        <a href="#servicos" class="btn btn-outline min-h-14 px-6 text-base">Ver serviços</a>
+      </div>
+      <ul class="mt-7 flex flex-col gap-x-6 gap-y-2.5 text-sm text-muted sm:flex-row sm:flex-wrap">
+        {
+          confianca.map((c) => (
+            <li class="flex items-center gap-2">
+              <Icon name={c.icone} size={18} class="shrink-0 text-brand" />
+              {c.texto}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="relative mx-auto w-full max-w-[560px] lg:max-w-none">
+      <div class="hero-foto relative aspect-[1/1] overflow-hidden rounded-tr-card lg:aspect-[11/12]">
+        <Image
+          src={heroFoto}
+          alt="Engenheiro com capacete e óculos de proteção mede a espessura da parede de um vaso de pressão com aparelho de ultrassom, em uma indústria"
+          widths={[400, 640, 880, 1100]}
+          sizes="(min-width: 1200px) 520px, (min-width: 1024px) 44vw, (min-width: 608px) 560px, calc(100vw - 32px)"
+          loading="eager"
+          fetchpriority="high"
+          class="h-full w-full object-cover object-[45%_center]"
+        />
+        <div class="absolute inset-0 bg-[linear-gradient(200deg,rgb(11_22_32/0.4),rgb(11_22_32/0.6))]" aria-hidden="true"></div>
+      </div>
+      <!-- Faixa ciano paralela ao corte de 41° -->
+      <svg
+        class="hero-faixa pointer-events-none absolute bottom-0 left-0 overflow-visible"
+        viewBox="0 0 100 86.93"
+        aria-hidden="true"
+      >
+        <line x1="-6" y1="10" x2="86" y2="90" stroke="#00B8D9" stroke-width="2" vector-effect="non-scaling-stroke"></line>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    /* Degrau na borda inferior, com a diagonal de 41° das hastes do M */
+    --degrau: 48px;
+    --degrau-x: 62%;
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      100% 100%,
+      calc(var(--degrau-x) + var(--degrau) / var(--tan41)) 100%,
+      var(--degrau-x) calc(100% - var(--degrau)),
+      0 calc(100% - var(--degrau))
+    );
+  }
+
+  @media (min-width: 768px) {
+    .hero {
+      --degrau: 80px;
+      --degrau-x: 56%;
+    }
+  }
+
+  .hero-foto,
+  .hero-faixa {
+    --corte: 120px;
+  }
+
+  @media (min-width: 1024px) {
+    .hero-foto,
+    .hero-faixa {
+      --corte: 200px;
+    }
+  }
+
+  /* Recorte do canto inferior esquerdo da foto a 41° */
+  .hero-foto {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, var(--corte) 100%, 0 calc(100% - var(--corte) * var(--tan41)));
+  }
+
+  .hero-faixa {
+    width: var(--corte);
+    height: calc(var(--corte) * var(--tan41));
+    transform: translate(-10px, 9px);
+  }
+</style>

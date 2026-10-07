@@ -1,0 +1,48 @@
+---
+import simboloM from '../assets/logo/simbolo-m.svg';
+import WhatsAppButton from './WhatsAppButton.astro';
+---
+
+<section aria-labelledby="cta-titulo" class="cta relative -mt-12 overflow-hidden bg-steel-950 pt-[calc(var(--degrau)+4rem)] pb-16 md:-mt-20 md:pb-24">
+  <!-- Marca d'água: símbolo M gigante a 5% -->
+  <img
+    src={simboloM.src}
+    alt=""
+    width="424"
+    height="258"
+    loading="lazy"
+    class="pointer-events-none absolute top-1/2 left-1/2 w-[160%] max-w-none -translate-x-1/2 -translate-y-[40%] opacity-5 md:w-[1100px]"
+  />
+  <div class="container-site relative text-center" data-reveal>
+    <h2 id="cta-titulo" class="h2 mx-auto max-w-[20ch]">Seus equipamentos em dia começam com uma mensagem</h2>
+    <p class="mx-auto mt-5 max-w-[46ch] text-lg text-muted">
+      Envie a lista dos seus equipamentos e receba uma proposta sem compromisso.
+    </p>
+    <div class="mt-8 flex justify-center">
+      <WhatsAppButton chave="geral" secao="cta-final" size="lg">Falar com o engenheiro no WhatsApp</WhatsAppButton>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Borda superior em degrau com a diagonal de 41°, espelhando o hero */
+  .cta {
+    --degrau: 48px;
+    --degrau-x: 38%;
+    clip-path: polygon(
+      0 0,
+      var(--degrau-x) 0,
+      calc(var(--degrau-x) + var(--degrau) / var(--tan41)) var(--degrau),
+      100% var(--degrau),
+      100% 100%,
+      0 100%
+    );
+  }
+
+  @media (min-width: 768px) {
+    .cta {
+      --degrau: 80px;
+      --degrau-x: 44%;
+    }
+  }
+</style>

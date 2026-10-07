@@ -1,0 +1,35 @@
+---
+import Icon from './Icon.astro';
+import { faq } from '../data/faq';
+---
+
+<section id="duvidas" aria-labelledby="duvidas-titulo" class="on-light bg-mist pt-16 pb-28 text-steel-950 md:pt-24 md:pb-40">
+  <div class="container-site grid gap-10 lg:grid-cols-[1fr_1.8fr] lg:gap-16">
+    <h2 id="duvidas-titulo" class="h2" data-reveal>Perguntas frequentes</h2>
+
+    <div class="border-t border-steel-950/15" data-reveal>
+      {
+        faq.map((f, i) => (
+          <div class="border-b border-steel-950/15">
+            <h3 class="font-sans text-base font-medium tracking-normal md:text-lg">
+              <button
+                type="button"
+                id={`faq-botao-${i}`}
+                class="group flex min-h-14 w-full items-center justify-between gap-4 py-4 text-left hover:text-brand-ink"
+                aria-expanded="false"
+                aria-controls={`faq-resposta-${i}`}
+                data-acordeao
+              >
+                <span>{f.pergunta}</span>
+                <Icon name="chevron-down" size={20} class="shrink-0 text-brand-ink transition-transform duration-200 group-aria-expanded:rotate-180" />
+              </button>
+            </h3>
+            <div id={`faq-resposta-${i}`} role="region" aria-labelledby={`faq-botao-${i}`} class="pb-5 text-muted-light" hidden>
+              <p class="max-w-[60ch]">{f.resposta}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

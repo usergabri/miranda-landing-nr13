@@ -1,0 +1,164 @@
+---
+import logoPrincipal from '../assets/logo/logo-principal.svg';
+import simboloM from '../assets/logo/simbolo-m.svg';
+import Icon from './Icon.astro';
+import { waAttrs } from '../data/whatsapp';
+
+const links = [
+  { href: '#nr13', label: 'NR-13' },
+  { href: '#servicos', label: 'Serviços' },
+  { href: '#como-funciona', label: 'Como funciona' },
+  { href: '#clientes', label: 'Clientes' },
+  { href: '#duvidas', label: 'Dúvidas' },
+];
+---
+
+<header
+  id="site-header"
+  class="group/header fixed inset-x-0 top-0 z-40 border-b border-transparent transition-[background-color,border-color] duration-200 data-[compact=true]:border-steel-800 data-[compact=true]:bg-steel-950"
+  data-compact="false"
+>
+  <div
+    class="container-site flex h-[72px] items-center justify-between gap-4 transition-[height] duration-200 group-data-[compact=true]/header:h-16 lg:h-20"
+  >
+    <a href="#topo" class="-m-2 shrink-0 p-2" aria-label="Miranda Engenharia, voltar ao topo">
+      <img
+        src={logoPrincipal.src}
+        alt=""
+        width="122"
+        height="40"
+        class="hidden h-9 w-auto min-[360px]:block lg:h-10"
+      />
+      <img src={simboloM.src} alt="" width="57" height="35" class="h-[35px] w-auto min-[360px]:hidden" />
+    </a>
+
+    <nav aria-label="Principal" class="hidden lg:block">
+      <ul class="flex items-center gap-7 text-[0.95rem] font-medium">
+        {
+          links.map((l) => (
+            <li>
+              <a href={l.href} class="py-2 text-white/85 transition-colors hover:text-brand">
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a {...waAttrs('geral', 'header')} class="btn btn-whatsapp hidden md:inline-flex">
+        <Icon name="whatsapp" size={20} />
+        <span>Falar no WhatsApp</span>
+      </a>
+      <a
+        {...waAttrs('geral', 'header')}
+        class="btn btn-whatsapp size-11 min-h-11 p-0 md:hidden"
+        aria-label="Falar no WhatsApp"
+      >
+        <Icon name="whatsapp" size={22} />
+      </a>
+      <button
+        type="button"
+        id="menu-toggle"
+        class="flex size-11 items-center justify-center rounded-card border border-steel-800 text-white lg:hidden"
+        aria-expanded="false"
+        aria-controls="menu-mobile"
+        aria-label="Abrir menu"
+      >
+        <Icon name="menu" size={22} />
+      </button>
+    </div>
+  </div>
+
+  <div
+    id="menu-mobile"
+    class="fixed inset-0 z-50 flex flex-col bg-steel-950 lg:hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Menu"
+    hidden
+  >
+    <div class="container-site flex h-[72px] shrink-0 items-center justify-between border-b border-steel-800">
+      <img src={simboloM.src} alt="" width="57" height="35" class="h-[35px] w-auto" />
+      <button
+        type="button"
+        id="menu-fechar"
+        class="flex size-11 items-center justify-center rounded-card border border-steel-800 text-white"
+        aria-label="Fechar menu"
+      >
+        <Icon name="x" size={22} />
+      </button>
+    </div>
+    <nav aria-label="Menu móvel" class="container-site flex flex-1 flex-col justify-between overflow-y-auto py-8">
+      <ul class="flex flex-col">
+        {
+          links.map((l) => (
+            <li class="border-b border-steel-800">
+              <a href={l.href} data-menu-link class="flex items-center justify-between py-5 font-display text-2xl font-bold text-white">
+                {l.label}
+                <Icon name="arrow-right" size={22} class="text-brand" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a {...waAttrs('geral', 'menu-mobile')} class="btn btn-whatsapp mt-8 w-full">
+        <Icon name="whatsapp" size={20} />
+        <span>Falar no WhatsApp</span>
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById('site-header')!;
+  const atualizar = () => {
+    header.dataset.compact = String(window.scrollY > 40);
+  };
+  atualizar();
+  window.addEventListener('scroll', atualizar, { passive: true });
+
+  // Menu móvel em tela cheia
+  const toggle = document.getElementById('menu-toggle') as HTMLButtonElement;
+  const fechar = document.getElementById('menu-fechar') as HTMLButtonElement;
+  const painel = document.getElementById('menu-mobile') as HTMLElement;
+
+  const focaveis = () =>
+    [...painel.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')].filter((el) => el.offsetParent !== null);
+
+  function abrir() {
+    painel.hidden = false;
+    toggle.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    fechar.focus();
+  }
+
+  function fecharMenu(devolverFoco = true) {
+    painel.hidden = true;
+    toggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    if (devolverFoco) toggle.focus();
+  }
+
+  toggle.addEventListener('click', abrir);
+  fechar.addEventListener('click', () => fecharMenu());
+  painel.querySelectorAll('[data-menu-link]').forEach((a) => a.addEventListener('click', () => fecharMenu(false)));
+  painel.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') fecharMenu();
+    if (e.key !== 'Tab') return;
+    const lista = focaveis();
+    const primeiro = lista[0];
+    const ultimo = lista[lista.length - 1];
+    if (e.shiftKey && document.activeElement === primeiro) {
+      e.preventDefault();
+      ultimo.focus();
+    } else if (!e.shiftKey && document.activeElement === ultimo) {
+      e.preventDefault();
+      primeiro.focus();
+    }
+  });
+  window.matchMedia('(min-width: 1024px)').addEventListener('change', (e) => {
+    if (e.matches && !painel.hidden) fecharMenu(false);
+  });
+</script>

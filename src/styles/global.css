@@ -1,0 +1,141 @@
+@import 'tailwindcss';
+@config '../../tailwind.config.mjs';
+
+@import '@fontsource/montserrat/latin-700.css';
+@import '@fontsource/montserrat/latin-800.css';
+@import '@fontsource/inter/latin-400.css';
+@import '@fontsource/inter/latin-500.css';
+
+@layer base {
+  :root {
+    /* Diagonal de 41° (hastes do M): tan(41°) ≈ 0,8693 */
+    --tan41: 0.8693;
+    --header-h: 72px;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: calc(var(--header-h) + 8px);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    @apply bg-steel-950 font-sans text-white antialiased;
+    font-size: 1rem;
+    line-height: 1.6;
+    overflow-x: clip;
+  }
+
+  @media (min-width: 768px) {
+    body {
+      font-size: 1.0625rem;
+    }
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  h3 {
+    font-weight: 700;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid #00b8d9;
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .on-light :focus-visible {
+    outline-color: #00788f;
+  }
+
+  .skip-link {
+    @apply bg-brand text-steel-950 fixed left-2 z-[100] rounded-card px-4 py-2 font-medium;
+    top: -100px;
+  }
+
+  .skip-link:focus {
+    top: 8px;
+  }
+}
+
+@layer components {
+  .container-site {
+    @apply mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8;
+  }
+
+  .h2 {
+    font-size: clamp(1.75rem, 3.6vw, 2.5rem);
+  }
+
+  .btn {
+    @apply inline-flex min-h-12 items-center justify-center gap-2.5 rounded-card px-5 py-3 text-center font-display text-[0.95rem] font-bold transition-colors duration-150;
+  }
+
+  /* Único uso do verde WhatsApp: botões de conversão */
+  .btn-whatsapp {
+    @apply bg-whatsapp text-steel-950 hover:bg-whatsapp-hover;
+  }
+
+  .btn-outline {
+    @apply border border-white/70 text-white hover:border-white hover:bg-white/10;
+  }
+
+  /* Card padrão: raio 6px, borda 1px steel-800, sem sombra */
+  .card {
+    @apply rounded-card border border-steel-800 bg-steel-900;
+  }
+
+  /* Hastes paralelas do M: duas linhas diagonais (2px, vão 6px) */
+  .hastes {
+    position: absolute;
+    width: 28px;
+    height: 24px;
+    background:
+      linear-gradient(
+        to top right,
+        transparent calc(50% - 5px),
+        #00b8d9 calc(50% - 5px),
+        #00b8d9 calc(50% - 3px),
+        transparent calc(50% - 3px),
+        transparent calc(50% + 3px),
+        #00b8d9 calc(50% + 3px),
+        #00b8d9 calc(50% + 5px),
+        transparent calc(50% + 5px)
+      );
+    pointer-events: none;
+  }
+}
+
+/* Revelação ao entrar na tela (só com JS e sem redução de movimento) */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .js [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}

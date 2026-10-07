@@ -1,0 +1,74 @@
+---
+import { Image } from 'astro:assets';
+import bancadaValvula from '../assets/fotos/bancada-valvula.jpeg';
+import Icon from './Icon.astro';
+import PhotoPlaceholder from './PhotoPlaceholder.astro';
+import WhatsAppButton from './WhatsAppButton.astro';
+import { nr13 } from '../data/servicos';
+
+const fotos = { 'bancada-valvula': bancadaValvula } as const;
+---
+
+<section id="nr13" aria-labelledby="nr13-titulo" class="bg-steel-950 py-16 md:py-24">
+  <div class="container-site">
+    <h2 id="nr13-titulo" class="h2 max-w-[24ch]" data-reveal>
+      <span class="whitespace-nowrap">NR-13</span> de ponta a ponta: da inspeção à documentação completa
+    </h2>
+
+    <ul class="mt-10 grid gap-5 md:grid-cols-3">
+      {
+        nr13.equipamentos.map((eq, i) => (
+          <li class="card overflow-hidden" data-reveal style={`--reveal-delay:${i * 80}ms`}>
+            <div class="relative aspect-[4/3]">
+              {eq.foto ? (
+                <>
+                  <Image
+                    src={fotos[eq.foto as keyof typeof fotos]}
+                    alt={eq.alt ?? ''}
+                    widths={[360, 560, 760]}
+                    sizes="(min-width: 1200px) 370px, (min-width: 768px) 31vw, calc(100vw - 32px)"
+                    class="h-full w-full object-cover object-[center_45%]"
+                  />
+                  <div class="absolute inset-0 bg-[linear-gradient(180deg,rgb(11_22_32/0.4),rgb(11_22_32/0.6))]" aria-hidden="true" />
+                </>
+              ) : (
+                <PhotoPlaceholder descricao={eq.legendaPlaceholder} />
+              )}
+            </div>
+            <div class="border-t border-steel-800 p-6">
+              <h3 class="text-xl">{eq.titulo}</h3>
+              <p class="mt-2 text-muted">{eq.texto}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="mt-12 grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-stretch lg:gap-10">
+      <div data-reveal>
+        <h3 class="text-2xl">O que você recebe</h3>
+        <ul class="mt-6 grid gap-x-8 gap-y-4 sm:grid-cols-2">
+          {
+            nr13.entregaveis.map((item) => (
+              <li class="flex gap-3">
+                <span class="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full border border-brand/50">
+                  <Icon name="check" size={15} strokeWidth={2.25} class="text-brand" />
+                </span>
+                <span>{item}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <div class="mt-8">
+          <WhatsAppButton chave="nr13" secao="nr13">Pedir orçamento de NR-13</WhatsAppButton>
+        </div>
+      </div>
+
+      <aside class="relative flex flex-col justify-center rounded-card border border-brand bg-steel-900 p-8 md:p-10" data-reveal aria-label="Caso em destaque">
+        <span class="hastes top-5 right-5" aria-hidden="true"></span>
+        <p class="font-display text-[clamp(4rem,9vw,6rem)] leading-none font-extrabold tracking-[-0.03em] text-brand">450</p>
+        <p class="mt-4 max-w-[30ch] text-lg">vasos de pressão inspecionados em um único projeto para o setor automotivo</p>
+      </aside>
+    </div>
+  </div>
+</section>

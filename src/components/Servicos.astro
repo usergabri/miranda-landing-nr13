@@ -1,0 +1,38 @@
+---
+import { gruposServicos } from '../data/servicos';
+import { waAttrs } from '../data/whatsapp';
+---
+
+<section id="servicos" aria-labelledby="servicos-titulo" class="on-light bg-mist py-16 text-steel-950 md:py-24">
+  <div class="container-site">
+    <h2 id="servicos-titulo" class="h2 max-w-[28ch]" data-reveal>
+      Tudo o que sua empresa precisa para ficar em conformidade, com um só engenheiro responsável
+    </h2>
+
+    <div class="mt-10 grid gap-5 md:grid-cols-2">
+      {
+        gruposServicos.map((g, i) => (
+          <article class="rounded-card border border-steel-950/10 bg-white p-6 md:p-8" data-reveal style={`--reveal-delay:${(i % 2) * 80}ms`}>
+            <h3 class="text-xl md:text-[1.375rem]">{g.titulo}</h3>
+            <p class="mt-2 text-muted-light">{g.apoio}</p>
+            <ul class="mt-5">
+              {g.itens.map((item) => (
+                <li class="border-t border-steel-950/10">
+                  <a
+                    {...waAttrs(item.chave, 'servicos')}
+                    class="group flex min-h-12 items-center justify-between gap-4 py-3 font-medium transition-colors hover:text-brand-ink"
+                  >
+                    <span>{item.nome}</span>
+                    <span class="shrink-0 text-lg text-brand-ink transition-transform group-hover:translate-x-1" aria-hidden="true">
+                      →
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

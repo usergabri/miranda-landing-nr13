@@ -1,0 +1,49 @@
+---
+import { Image } from 'astro:assets';
+import fotoEngenheiro from '../assets/fotos/engenheiro-valvula.jpeg';
+import Icon from './Icon.astro';
+import WhatsAppButton from './WhatsAppButton.astro';
+import { site } from '../data/site';
+
+// Sem retrato formal no kit: usa a foto real do engenheiro em campo.
+// TODO: substituir por assets/fotos/retrato-engenheiro.jpg quando enviado.
+---
+
+<section aria-labelledby="engenheiro-titulo" class="bg-steel-900 py-16 md:py-24">
+  <div class="container-site grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+    <div class="relative" data-reveal>
+      <span class="hastes -top-3 -left-3 hidden md:block" aria-hidden="true"></span>
+      <div class="relative aspect-[4/3] overflow-hidden rounded-card border border-steel-800 lg:aspect-[5/4]">
+        <Image
+          src={fotoEngenheiro}
+          alt="Engenheiro da Miranda Engenharia, com capacete e óculos de proteção, confere válvula de segurança e manômetro em uma caldeira industrial"
+          widths={[400, 640, 900, 1200]}
+          sizes="(min-width: 1200px) 560px, (min-width: 1024px) 46vw, calc(100vw - 32px)"
+          class="h-full w-full object-cover object-[70%_center]"
+        />
+        <div class="absolute inset-0 bg-[linear-gradient(20deg,rgb(11_22_32/0.6),rgb(11_22_32/0.4))]" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <div data-reveal>
+      <h2 id="engenheiro-titulo" class="h2">Quem assina o seu laudo já esteve do lado de dentro do equipamento</h2>
+      <p class="mt-5 text-lg text-muted">
+        Antes da engenharia, {site.nomeEngenheiro} passou 5 anos no chão de fábrica como soldador. Conhece chapa, solda e
+        corrosão na prática, não só no papel. Em {site.anoFundacao} fundou a Miranda Engenharia para unir essa vivência à
+        responsabilidade técnica de engenheiro mecânico.
+      </p>
+
+      <div class="mt-7 flex items-start gap-4 rounded-card border border-steel-800 bg-steel-950 p-5">
+        <Icon name="badge-check" size={32} strokeWidth={1.5} class="shrink-0 text-brand" />
+        <p class="font-display leading-relaxed font-bold">
+          Engenheiro Mecânico <span class="text-brand" aria-hidden="true">·</span> CREA {site.creaResponsavel}
+          <span class="block text-muted">Profissional Legalmente Habilitado <span class="whitespace-nowrap">NR-13</span></span>
+        </p>
+      </div>
+
+      <div class="mt-8">
+        <WhatsAppButton chave="engenheiro" secao="engenheiro">Falar direto com o engenheiro</WhatsAppButton>
+      </div>
+    </div>
+  </div>
+</section>

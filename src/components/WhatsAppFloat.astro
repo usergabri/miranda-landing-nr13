@@ -1,0 +1,110 @@
+---
+import Icon from './Icon.astro';
+import { waAttrs } from '../data/whatsapp';
+---
+
+<!-- Botão flutuante + balão (some quando a barra móvel está ativa) -->
+<div class="wa-float fixed right-4 z-40 flex items-end gap-3 md:right-6">
+  <div
+    id="wa-balao"
+    class="relative mb-2 flex items-center gap-2 rounded-card border border-steel-800 bg-steel-900 py-2 pr-2 pl-4 text-sm font-medium text-white"
+    role="status"
+    hidden
+  >
+    Fale com o engenheiro
+    <button
+      type="button"
+      id="wa-balao-fechar"
+      class="flex size-8 items-center justify-center rounded-card text-muted hover:text-white"
+      aria-label="Fechar mensagem"
+    >
+      <Icon name="x" size={16} />
+    </button>
+  </div>
+  <a
+    {...waAttrs('geral', 'flutuante')}
+    class="flex size-14 shrink-0 items-center justify-center rounded-full bg-whatsapp text-steel-950 transition-colors hover:bg-whatsapp-hover"
+    aria-label="Falar no WhatsApp"
+  >
+    <Icon name="whatsapp" size={30} />
+  </a>
+</div>
+
+<!-- Barra fixa no mobile (abaixo de 768px, depois que o hero sai da tela) -->
+<div
+  id="wa-barra"
+  class="fixed inset-x-0 bottom-0 z-40 translate-y-full border-t border-steel-800 bg-steel-950 px-4 pt-3 transition-transform duration-200 md:hidden"
+  style="padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));"
+  aria-hidden="true"
+>
+  <a {...waAttrs('geral', 'barra-mobile')} class="btn btn-whatsapp w-full" tabindex="-1">
+    <Icon name="whatsapp" size={20} />
+    <span>Falar no WhatsApp</span>
+  </a>
+</div>
+
+<style>
+  .wa-float {
+    bottom: calc(1rem + var(--cookie-h, 0px) + env(safe-area-inset-bottom));
+    transition: bottom 0.2s ease;
+  }
+
+  :global(html[data-barra='on']) .wa-float {
+    display: none;
+  }
+
+  :global(html[data-barra='on']) #wa-barra {
+    transform: none;
+  }
+</style>
+
+<script>
+  const raiz = document.documentElement;
+  const barra = document.getElementById('wa-barra') as HTMLElement;
+  const linkBarra = barra.querySelector('a') as HTMLAnchorElement;
+  const hero = document.getElementById('topo');
+  const mobile = window.matchMedia('(max-width: 767.98px)');
+  let heroVisivel = true;
+
+  function atualizarBarra() {
+    const ativa = mobile.matches && !heroVisivel;
+    raiz.dataset.barra = ativa ? 'on' : 'off';
+    barra.setAttribute('aria-hidden', String(!ativa));
+    linkBarra.tabIndex = ativa ? 0 : -1;
+    raiz.style.setProperty('--barra-h', ativa ? `${barra.offsetHeight}px` : '0px');
+  }
+
+  if (hero && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([ent]) => {
+      heroVisivel = ent.isIntersecting;
+      atualizarBarra();
+    }).observe(hero);
+  }
+  mobile.addEventListener('change', atualizarBarra);
+
+  // Balão "Fale com o engenheiro": aparece uma vez, após 8 s; o fechamento fica salvo na sessão
+  const CHAVE = 'wa-balao-fechado';
+  const balao = document.getElementById('wa-balao') as HTMLElement;
+  const fechado = () => {
+    try {
+      return sessionStorage.getItem(CHAVE) === '1';
+    } catch {
+      return false;
+    }
+  };
+
+  if (!fechado()) {
+    window.setTimeout(() => {
+      if (raiz.dataset.barra !== 'on') balao.hidden = false;
+    }, 8000);
+  }
+
+  document.getElementById('wa-balao-fechar')!.addEventListener('click', () => {
+    balao.hidden = true;
+    try {
+      sessionStorage.setItem(CHAVE, '1');
+    } catch {
+      /* sem armazenamento: fecha só nesta página */
+    }
+  });
+</script>

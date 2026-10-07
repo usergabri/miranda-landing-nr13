@@ -1,0 +1,90 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Numeros from '../components/Numeros.astro';
+import Riscos from '../components/Riscos.astro';
+import Nr13 from '../components/Nr13.astro';
+import Divider from '../components/Divider.astro';
+import Servicos from '../components/Servicos.astro';
+import PorQue from '../components/PorQue.astro';
+import Engenheiro from '../components/Engenheiro.astro';
+import ComoFunciona from '../components/ComoFunciona.astro';
+import Clientes from '../components/Clientes.astro';
+import Atendimento from '../components/Atendimento.astro';
+import Faq from '../components/Faq.astro';
+import CtaFinal from '../components/CtaFinal.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import { site, ehMarcador } from '../data/site';
+import { faq } from '../data/faq';
+import { catalogoServicos } from '../data/servicos';
+
+const title = 'Inspeção NR-13 de Caldeiras e Vasos de Pressão | Miranda Engenharia';
+const description =
+  'Inspeção NR-13, laudos técnicos, ART e PMOC com engenheiro mecânico habilitado. Sede no Paraná, atendimento em todo o Brasil. Orçamento pelo WhatsApp.';
+
+const url = new URL('/', Astro.site).href;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ProfessionalService',
+    '@id': `${url}#empresa`,
+    name: site.nome,
+    url,
+    logo: new URL('/icon-512.png', Astro.site).href,
+    image: new URL('/og-image.png', Astro.site).href,
+    description,
+    telephone: '+55-44-99712-7007',
+    ...(ehMarcador(site.email) ? {} : { email: site.email }),
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: site.cidade,
+      addressRegion: site.uf,
+      addressCountry: 'BR',
+    },
+    areaServed: 'BR',
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Serviços de engenharia mecânica',
+      itemListElement: catalogoServicos.map((nome) => ({
+        '@type': 'Offer',
+        itemOffered: { '@type': 'Service', name: nome },
+      })),
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({
+      '@type': 'Question',
+      name: f.pergunta,
+      acceptedAnswer: { '@type': 'Answer', text: f.resposta },
+    })),
+  },
+];
+---
+
+<Base title={title} description={description} jsonLd={jsonLd}>
+  <Header />
+  <main id="conteudo">
+    <Hero />
+    <Numeros />
+    <Riscos />
+    <Divider />
+    <Nr13 />
+    <Servicos />
+    <PorQue />
+    <Engenheiro />
+    <ComoFunciona />
+    <Divider />
+    <Clientes />
+    <Divider />
+    <Atendimento />
+    <Faq />
+    <CtaFinal />
+  </main>
+  <Footer />
+  <WhatsAppFloat />
+</Base>

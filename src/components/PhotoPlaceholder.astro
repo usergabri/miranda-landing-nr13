@@ -1,0 +1,19 @@
+---
+// Placeholder neutro para fotos reais ainda não enviadas. Nunca use banco de imagens.
+import Icon from './Icon.astro';
+
+interface Props {
+  descricao: string;
+  class?: string;
+}
+const { descricao, class: classe } = Astro.props;
+---
+
+<div
+  class:list={['flex h-full w-full flex-col items-center justify-center gap-3 bg-steel-900 p-6 text-center', classe]}
+  role="img"
+  aria-label={`Espaço reservado para foto real: ${descricao}`}
+>
+  <Icon name="camera" size={32} strokeWidth={1.25} class="text-brand" />
+  <span class="max-w-[24ch] text-sm text-muted">Foto real: {descricao}</span>
+</div>

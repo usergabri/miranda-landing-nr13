@@ -1,0 +1,100 @@
+---
+import Base from '../layouts/Base.astro';
+import logoPrincipal from '../assets/logo/logo-principal.svg';
+import Footer from '../components/Footer.astro';
+import { site, ehMarcador } from '../data/site';
+
+const title = 'Política de Privacidade | Miranda Engenharia';
+const description =
+  'Como a Miranda Engenharia usa cookies de análise e os dados enviados pelo WhatsApp, e como falar com o responsável pelos seus dados.';
+---
+
+<Base title={title} description={description}>
+  <header class="border-b border-steel-800 bg-steel-950">
+    <div class="container-site flex h-[72px] items-center">
+      <a href="/" class="-m-2 p-2" aria-label="Miranda Engenharia, voltar à página inicial">
+        <img src={logoPrincipal.src} alt="" width="122" height="40" class="h-10 w-auto" />
+      </a>
+    </div>
+  </header>
+
+  <main id="conteudo" class="on-light bg-mist py-16 text-steel-950 md:py-20">
+    <article class="container-site max-w-3xl">
+      <h1 class="text-[clamp(2rem,4vw,2.75rem)]">Política de Privacidade</h1>
+      <p class="mt-4 text-muted-light">Última atualização: outubro de 2026.</p>
+
+      <div class="mt-10 space-y-10 [&_h2]:text-2xl [&_p]:mt-3 [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-5">
+        <section>
+          <h2>Quem somos</h2>
+          <p>
+            Este site é mantido pela {site.nome}, com sede em {site.cidade} ({site.uf}), CNPJ {site.cnpj}. Esta página
+            explica quais dados são tratados quando você visita o site ou fala conosco, seguindo a Lei Geral de Proteção de
+            Dados (Lei 13.709/2018).
+          </p>
+        </section>
+
+        <section>
+          <h2>Cookies de análise</h2>
+          <p>
+            Ao entrar no site, você escolhe se aceita ou recusa cookies de análise. Sua escolha fica guardada no seu
+            navegador.
+          </p>
+          <ul>
+            <li>
+              Se você aceitar, carregamos o Google Tag Manager e ferramentas de medição de audiência, que registram dados
+              como páginas visitadas, cliques nos botões de contato, tipo de dispositivo e região aproximada.
+            </li>
+            <li>Se você recusar, nenhuma dessas ferramentas é carregada.</li>
+            <li>
+              Para mudar de ideia, apague os dados do site no seu navegador: o aviso de cookies aparecerá de novo na próxima
+              visita.
+            </li>
+          </ul>
+          <p>Usamos essas informações apenas para entender o uso do site e melhorar o atendimento.</p>
+        </section>
+
+        <section>
+          <h2>Dados enviados pelo WhatsApp</h2>
+          <p>
+            Os botões do site abrem uma conversa no WhatsApp com uma mensagem pronta. O site não coleta nem guarda o que
+            você escreve: a conversa acontece diretamente no WhatsApp, que tem a própria política de privacidade.
+          </p>
+          <p>
+            As informações que você nos enviar, como nome, empresa, contato e lista de equipamentos, são usadas somente para
+            preparar o orçamento, executar os serviços contratados e cumprir obrigações legais, como a emissão de ARTs e
+            laudos. Não vendemos nem compartilhamos esses dados com terceiros para fins de marketing.
+          </p>
+        </section>
+
+        <section>
+          <h2>Seus direitos</h2>
+          <p>
+            Você pode pedir a qualquer momento acesso, correção ou exclusão dos seus dados, ou retirar um consentimento
+            dado.
+          </p>
+        </section>
+
+        <section>
+          <h2>Contato do responsável</h2>
+          <p>
+            Para qualquer assunto sobre privacidade, escreva para{' '}
+            {
+              ehMarcador(site.email) ? (
+                <strong>{site.email}</strong>
+              ) : (
+                <a href={`mailto:${site.email}`} class="font-medium text-brand-ink underline">
+                  {site.email}
+                </a>
+              )
+            }.
+          </p>
+        </section>
+      </div>
+
+      <p class="mt-12">
+        <a href="/" class="font-medium text-brand-ink underline underline-offset-2">Voltar para a página inicial</a>
+      </p>
+    </article>
+  </main>
+  <Footer base="/" />
+</Base>

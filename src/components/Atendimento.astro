@@ -1,0 +1,92 @@
+---
+import { estados, mapaGeo, mapaViewBox } from '../data/mapa-brasil';
+import { site, ehMarcador } from '../data/site';
+
+// Ignora marcadores {{UF_...}} ao pintar o mapa
+const atendidos = new Set(site.estadosAtendidos.filter((uf) => !ehMarcador(uf)));
+const nomesAtendidos = estados.filter((e) => atendidos.has(e.uf)).map((e) => e.nome);
+
+// Nova Esperança (PR): 23,18° S, 52,21° O
+const sede = { lat: -23.1817, lon: -52.2056 };
+const sx = ((sede.lon - mapaGeo.lonMin) / (mapaGeo.lonMax - mapaGeo.lonMin)) * mapaGeo.largura;
+const sy = ((mapaGeo.latMax - sede.lat) / (mapaGeo.latMax - mapaGeo.latMin)) * mapaGeo.altura;
+
+const descricao = `Mapa do Brasil com os estados já atendidos em destaque (${nomesAtendidos.join(' e ')}) e a sede em Nova Esperança, no Paraná.`;
+---
+
+<section aria-labelledby="brasil-titulo" class="overflow-hidden bg-steel-950 py-16 md:py-24">
+  <div class="container-site grid items-center gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+    <div data-reveal>
+      <h2 id="brasil-titulo" class="h2 max-w-[18ch]">Sede no Paraná, atendimento em todo o Brasil</h2>
+      <p class="mt-5 max-w-[46ch] text-lg text-muted">
+        Deslocamos a equipe até a sua planta, em qualquer estado. Laudos e ARTs são entregues em formato digital.
+      </p>
+      <ul class="mt-8 flex flex-col gap-3 text-sm text-muted">
+        <li class="flex items-center gap-3">
+          <span class="relative flex size-4 items-center justify-center" aria-hidden="true">
+            <span class="size-2.5 rounded-full bg-brand"></span>
+          </span>
+          Sede — Nova Esperança (PR)
+        </li>
+        <li class="flex items-center gap-3">
+          <span class="size-4 rounded-[3px] border border-brand/60 bg-brand/25" aria-hidden="true"></span>
+          Estados já atendidos
+        </li>
+      </ul>
+    </div>
+
+    <figure class="relative mx-auto w-full max-w-[520px]" data-reveal>
+      <svg viewBox={mapaViewBox} class="h-auto w-full" role="img" aria-label={descricao}>
+        <g stroke="rgba(255,255,255,0.15)" stroke-width="1" stroke-linejoin="round">
+          {
+            estados.map((e) => (
+              <path d={e.d} fill={atendidos.has(e.uf) ? 'rgba(0,184,217,0.25)' : 'transparent'} />
+            ))
+          }
+        </g>
+        <g transform={`translate(${sx.toFixed(1)} ${sy.toFixed(1)})`}>
+          <circle r="7" fill="none" stroke="#00B8D9" stroke-width="2" class="pulso"></circle>
+          <circle r="5" fill="#00B8D9"></circle>
+        </g>
+        <g class="rotulo-mapa" font-family="Inter, system-ui, sans-serif" font-size="17" fill="#FFFFFF">
+          <line x1={sx + 8} y1={sy} x2={sx + 40} y2={sy + 30} stroke="#00B8D9" stroke-width="1"></line>
+          <text x={sx + 44} y={sy + 35}>Sede — Nova Esperança (PR)</text>
+        </g>
+      </svg>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .rotulo-mapa {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .rotulo-mapa {
+      display: inline;
+    }
+  }
+
+  .pulso {
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .pulso {
+      animation: pulso 2s ease-out infinite;
+    }
+  }
+
+  @keyframes pulso {
+    from {
+      transform: scale(1);
+      opacity: 0.9;
+    }
+    to {
+      transform: scale(3.2);
+      opacity: 0;
+    }
+  }
+</style>

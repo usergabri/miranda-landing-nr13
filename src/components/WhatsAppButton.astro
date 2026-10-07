@@ -1,0 +1,21 @@
+---
+import Icon from './Icon.astro';
+import { waAttrs, type ChaveWhatsApp } from '../data/whatsapp';
+
+interface Props {
+  chave: ChaveWhatsApp;
+  secao: string;
+  size?: 'md' | 'lg';
+  class?: string;
+}
+
+const { chave, secao, size = 'md', class: classe } = Astro.props;
+---
+
+<a
+  {...waAttrs(chave, secao)}
+  class:list={['btn btn-whatsapp', size === 'lg' && 'min-h-14 px-6 text-base md:text-lg', classe]}
+>
+  <Icon name="whatsapp" size={size === 'lg' ? 22 : 20} />
+  <span><slot /></span>
+</a>

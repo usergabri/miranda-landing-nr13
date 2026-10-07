@@ -1,0 +1,85 @@
+---
+interface Props {
+  gtmId: string;
+}
+const { gtmId } = Astro.props;
+---
+
+<div
+  id="cookie-banner"
+  class="card fixed inset-x-3 z-50 p-4 text-sm leading-relaxed md:right-auto md:left-4 md:max-w-sm"
+  style="bottom: calc(0.75rem + var(--barra-h, 0px) + env(safe-area-inset-bottom)); transition: bottom 0.2s ease;"
+  role="region"
+  aria-label="Aviso de cookies"
+  data-gtm={gtmId}
+  hidden
+>
+  <p class="text-muted">
+    Usamos cookies de análise para entender como o site é usado. Você pode aceitar ou recusar.
+    <a href="/politica-de-privacidade" class="text-white underline underline-offset-2 hover:text-brand">Política de Privacidade</a>
+  </p>
+  <div class="mt-3 flex gap-2">
+    <button type="button" data-cookie="recusado" class="btn btn-outline min-h-10 flex-1 py-2 text-sm">Recusar</button>
+    <button type="button" data-cookie="aceito" class="btn min-h-10 flex-1 bg-brand py-2 text-sm text-steel-950 hover:bg-white">Aceitar</button>
+  </div>
+</div>
+
+<script>
+  const CHAVE = 'miranda-cookies';
+  const banner = document.getElementById('cookie-banner') as HTMLElement;
+  const gtmId = banner.dataset.gtm ?? '';
+
+  const ler = () => {
+    try {
+      return localStorage.getItem(CHAVE);
+    } catch {
+      return null;
+    }
+  };
+
+  const gravar = (valor: string) => {
+    try {
+      localStorage.setItem(CHAVE, valor);
+    } catch {
+      /* armazenamento indisponível: vale só nesta visita */
+    }
+  };
+
+  // GTM só depois do aceite, e só se houver ID configurado
+  function carregarGTM() {
+    if (!gtmId || (window as any).__gtmCarregado) return;
+    (window as any).__gtmCarregado = true;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = `https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(gtmId)}`;
+    document.head.appendChild(s);
+    // Google Ads e Meta Pixel entrariam aqui (ou, de preferência, como tags dentro do GTM).
+  }
+
+  const raiz = document.documentElement;
+  const ajustarAltura = () =>
+    raiz.style.setProperty('--cookie-h', banner.hidden ? '0px' : `${banner.offsetHeight + 12}px`);
+  const ro = new ResizeObserver(ajustarAltura);
+
+  const escolha = ler();
+  if (escolha === 'aceito') {
+    carregarGTM();
+  } else if (escolha !== 'recusado') {
+    banner.hidden = false;
+    ro.observe(banner);
+    ajustarAltura();
+  }
+
+  banner.addEventListener('click', (e) => {
+    const botao = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-cookie]');
+    if (!botao) return;
+    const valor = botao.dataset.cookie!;
+    gravar(valor);
+    banner.hidden = true;
+    ro.disconnect();
+    ajustarAltura();
+    if (valor === 'aceito') carregarGTM();
+  });
+</script>

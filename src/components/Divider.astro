@@ -1,0 +1,25 @@
+---
+// Linha afilada derivada do traço sob "ENGENHARIA" na logo.
+// Use no máximo 4 vezes na página.
+interface Props {
+  withGear?: boolean;
+  class?: string;
+}
+const { withGear = false, class: classe } = Astro.props;
+---
+
+<div class:list={['relative mx-auto flex w-full max-w-[480px] items-center justify-center', classe]} aria-hidden="true">
+  <span class="h-px w-full bg-[linear-gradient(90deg,transparent,#00B8D9_50%,transparent)]"></span>
+  {
+    withGear && (
+      <span class="absolute flex size-7 items-center justify-center bg-steel-950">
+        <svg viewBox="0 0 16 16" width="16" height="16" class="text-brand" fill="currentColor">
+          <path
+            fill-rule="evenodd"
+            d="M6.9 0.6h2.2l0.35 1.8a5.6 5.6 0 0 1 1.45 0.6l1.5-1 1.55 1.55-1 1.5c0.27 0.45 0.47 0.94 0.6 1.45l1.8 0.35v2.2l-1.8 0.35a5.6 5.6 0 0 1-0.6 1.45l1 1.5-1.55 1.55-1.5-1a5.6 5.6 0 0 1-1.45 0.6l-0.35 1.8H6.9l-0.35-1.8a5.6 5.6 0 0 1-1.45-0.6l-1.5 1-1.55-1.55 1-1.5a5.6 5.6 0 0 1-0.6-1.45L0.6 9.1V6.9l1.8-0.35c0.13-0.51 0.33-1 0.6-1.45l-1-1.5 1.55-1.55 1.5 1c0.45-0.27 0.94-0.47 1.45-0.6ZM8 5.4a2.6 2.6 0 1 0 0 5.2 2.6 2.6 0 0 0 0-5.2Z"
+          />
+        </svg>
+      </span>
+    )
+  }
+</div>

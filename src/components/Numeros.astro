@@ -1,0 +1,66 @@
+---
+import { site } from '../data/site';
+
+const fmt = (n: number) => n.toLocaleString('pt-BR');
+---
+
+<section aria-label="Números da Miranda Engenharia" class="relative -mt-12 bg-steel-900 pt-[calc(48px+2.5rem)] pb-10 md:-mt-20 md:pt-[calc(80px+3rem)] md:pb-14">
+  <div class="container-site">
+    <dl class="grid grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-4">
+      {
+        site.numeros.map((n) => (
+          <div class="relative pl-4">
+            <span class="absolute top-1 bottom-1 left-0 w-0.5 bg-brand/60" aria-hidden="true" />
+            <dt class="sr-only">{n.legenda}</dt>
+            <dd class="font-display text-[clamp(2rem,4.6vw,3rem)] leading-none font-extrabold tracking-[-0.02em] text-brand tabular-nums">
+              {n.prefixo}<span data-contador={n.valor}>{fmt(n.valor)}</span>{n.sufixo && <span class="text-[0.55em]">{n.sufixo}</span>}
+            </dd>
+            <dd class="mt-2 text-sm leading-snug text-muted md:text-base" aria-hidden="true">
+              {n.legenda}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<script>
+  const contadores = document.querySelectorAll<HTMLElement>('[data-contador]');
+  const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!reduzir && 'IntersectionObserver' in window) {
+    const fmt = (n: number) => n.toLocaleString('pt-BR');
+    const animar = (el: HTMLElement) => {
+      const alvo = Number(el.dataset.contador);
+      const duracao = 1400;
+      const inicio = performance.now();
+      const passo = (agora: number) => {
+        const t = Math.min((agora - inicio) / duracao, 1);
+        const suave = 1 - Math.pow(1 - t, 3);
+        el.textContent = fmt(Math.round(alvo * suave));
+        if (t < 1) requestAnimationFrame(passo);
+      };
+      requestAnimationFrame(passo);
+    };
+
+    const obs = new IntersectionObserver(
+      (entradas) => {
+        for (const ent of entradas) {
+          if (!ent.isIntersecting) continue;
+          animar(ent.target as HTMLElement);
+          obs.unobserve(ent.target);
+        }
+      },
+      { threshold: 0.6 },
+    );
+
+    contadores.forEach((el) => {
+      // Reserva a largura final para não deslocar o layout durante a contagem
+      el.style.display = 'inline-block';
+      el.style.minWidth = `${el.offsetWidth}px`;
+      el.textContent = '0';
+      obs.observe(el);
+    });
+  }
+</script>

@@ -1,0 +1,51 @@
+---
+const motivos = [
+  {
+    titulo: 'Especialistas em NR-13',
+    texto: 'Não fazemos de tudo um pouco. NR-13 é o centro do nosso trabalho, com Profissional Legalmente Habilitado.',
+  },
+  {
+    titulo: 'Seus prazos sob controle',
+    texto: 'Avisamos antes de cada inspeção vencer, para você nunca ser pego pela fiscalização.',
+  },
+  {
+    titulo: 'Todo o Brasil, direto com o engenheiro',
+    texto: 'Vamos até a sua planta. Você fala com quem inspeciona e assina, sem intermediários.',
+  },
+  {
+    titulo: 'Não paramos no laudo',
+    texto: 'Acompanhamos as pendências encontradas até estarem resolvidas, dentro do cronograma combinado.',
+  },
+];
+---
+
+<section aria-labelledby="porque-titulo" class="bg-steel-950 py-16 md:py-24">
+  <div class="container-site">
+    <h2 id="porque-titulo" class="h2 max-w-[26ch]" data-reveal>
+      Quatro motivos para confiar a sua <span class="whitespace-nowrap">NR-13</span> a quem é especialista
+    </h2>
+
+    <ol class="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        motivos.map((m, i) => (
+          <li class="border-t border-steel-800 pt-6" data-reveal style={`--reveal-delay:${i * 80}ms`}>
+            <span class="numero-fino block font-display text-6xl leading-none font-extrabold" aria-hidden="true">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <h3 class="mt-5 text-xl">{m.titulo}</h3>
+            <p class="mt-2 text-muted">{m.texto}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  /* Números em contorno: traço fino ciano, sem preenchimento */
+  .numero-fino {
+    color: transparent;
+    -webkit-text-stroke: 1.25px #00b8d9;
+    letter-spacing: 0.02em;
+  }
+</style>
