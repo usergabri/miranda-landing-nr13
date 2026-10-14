@@ -1,4 +1,5 @@
 ---
+import { caminho } from '../data/caminho';
 import Base from '../layouts/Base.astro';
 import logoPrincipal from '../assets/logo/logo-principal.svg';
 import Footer from '../components/Footer.astro';
@@ -12,8 +13,8 @@ const description =
 <Base title={title} description={description}>
   <header class="border-b border-steel-800 bg-steel-950">
     <div class="container-site flex h-[72px] items-center">
-      <a href="/" class="-m-2 p-2" aria-label="Miranda Engenharia, voltar à página inicial">
-        <img src={logoPrincipal.src} alt="" width="122" height="40" class="h-10 w-auto" />
+      <a href={caminho('/')} class="-m-2 p-2" aria-label="Miranda Engenharia, voltar à página inicial">
+        <img src={logoPrincipal.src} alt="" width="144" height="40" class="h-10 w-auto" />
       </a>
     </div>
   </header>
@@ -92,7 +93,7 @@ const description =
       </div>
 
       <p class="mt-12">
-        <a href="/" class="font-medium text-brand-ink underline underline-offset-2">Voltar para a página inicial</a>
+        <a href={caminho('/')} class="font-medium text-brand-ink underline underline-offset-2">Voltar para a página inicial</a>
       </p>
     </article>
   </main>

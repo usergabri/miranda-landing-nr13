@@ -1,4 +1,5 @@
 ---
+import { caminho } from '../data/caminho';
 interface Props {
   gtmId: string;
 }
@@ -16,7 +17,7 @@ const { gtmId } = Astro.props;
 >
   <p class="text-muted">
     Usamos cookies de análise para entender como o site é usado. Você pode aceitar ou recusar.
-    <a href="/politica-de-privacidade" class="text-white underline underline-offset-2 hover:text-brand">Política de Privacidade</a>
+    <a href={caminho('/politica-de-privacidade')} class="text-white underline underline-offset-2 hover:text-brand">Política de Privacidade</a>
   </p>
   <div class="mt-3 flex gap-2">
     <button type="button" data-cookie="recusado" class="btn btn-outline min-h-10 flex-1 py-2 text-sm">Recusar</button>

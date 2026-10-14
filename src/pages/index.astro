@@ -1,4 +1,5 @@
 ---
+import { urlAbsoluta } from '../data/caminho';
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
@@ -24,7 +25,7 @@ const title = 'Inspeção NR-13 de Caldeiras e Vasos de Pressão | Miranda Engen
 const description =
   'Inspeção NR-13, laudos técnicos, ART e PMOC com engenheiro mecânico habilitado. Sede no Paraná, atendimento em todo o Brasil. Orçamento pelo WhatsApp.';
 
-const url = new URL('/', Astro.site).href;
+const url = urlAbsoluta('/', Astro.site);
 
 const jsonLd = [
   {
@@ -33,8 +34,8 @@ const jsonLd = [
     '@id': `${url}#empresa`,
     name: site.nome,
     url,
-    logo: new URL('/icon-512.png', Astro.site).href,
-    image: new URL('/og-image.png', Astro.site).href,
+    logo: urlAbsoluta('/icon-512.png', Astro.site),
+    image: urlAbsoluta('/og-image.png', Astro.site),
     description,
     telephone: '+55-44-99712-7007',
     ...(ehMarcador(site.email) ? {} : { email: site.email }),

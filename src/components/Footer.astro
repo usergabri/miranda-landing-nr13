@@ -1,4 +1,5 @@
 ---
+import { caminho } from '../data/caminho';
 import logoPrincipal from '../assets/logo/logo-principal.svg';
 import Divider from './Divider.astro';
 import { site, ehMarcador } from '../data/site';
@@ -23,7 +24,7 @@ const links = [
   <Divider withGear />
   <div class="container-site grid gap-10 pt-12 md:grid-cols-[1.3fr_1fr_1fr]">
     <div>
-      <img src={logoPrincipal.src} alt="Miranda Engenharia" width="146" height="48" class="h-12 w-auto" loading="lazy" />
+      <img src={logoPrincipal.src} alt="Miranda Engenharia" width="173" height="48" class="h-12 w-auto" loading="lazy" />
       <p class="mt-6 text-muted">
         {site.nome} · {site.cidade} ({site.uf}) · CNPJ {site.cnpj}
         <br />
@@ -59,14 +60,14 @@ const links = [
         {
           links.map((l) => (
             <li>
-              <a href={`${base}${l.href}`} class="text-muted hover:text-brand">
+              <a href={base ? `${caminho(base)}${l.href}` : l.href} class="text-muted hover:text-brand">
                 {l.label}
               </a>
             </li>
           ))
         }
         <li>
-          <a href="/politica-de-privacidade" class="text-muted hover:text-brand">Política de Privacidade</a>
+          <a href={caminho('/politica-de-privacidade')} class="text-muted hover:text-brand">Política de Privacidade</a>
         </li>
       </ul>
     </nav>

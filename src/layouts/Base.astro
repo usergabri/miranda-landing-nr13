@@ -1,4 +1,5 @@
 ---
+import { caminho, urlAbsoluta } from '../data/caminho';
 import '../styles/global.css';
 import montserrat800 from '@fontsource/montserrat/files/montserrat-latin-800-normal.woff2?url';
 import inter400 from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
@@ -15,7 +16,7 @@ interface Props {
 
 const { title, description, jsonLd = [], noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = new URL('/og-image.png', Astro.site).href;
+const ogImage = urlAbsoluta('/og-image.png', Astro.site);
 ---
 
 <!doctype html>
@@ -29,10 +30,10 @@ const ogImage = new URL('/og-image.png', Astro.site).href;
     {noindex && <meta name="robots" content="noindex, follow" />}
     <meta name="theme-color" content="#0B1620" />
 
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href={caminho('/favicon.svg')} type="image/svg+xml" />
+    <link rel="icon" href={caminho('/favicon-32.png')} sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href={caminho('/apple-touch-icon.png')} />
+    <link rel="manifest" href={caminho('/manifest.webmanifest')} />
 
     <link rel="preload" href={montserrat800} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={inter400} as="font" type="font/woff2" crossorigin />

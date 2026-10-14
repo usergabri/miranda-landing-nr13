@@ -1,4 +1,4 @@
-// Gerado por scripts/preparar-assets.mjs a partir de assets/brazil.svg (MapSVG, uso livre).
+// Gerado por scripts/preparar-assets.mjs a partir de assets/mapa-brasil.svg (MapSVG, uso livre).
 // Não edite à mão.
 export const mapaViewBox = '0 0 612.52 639.04';
 // Limites geográficos do SVG (lon/lat) para posicionar pontos
